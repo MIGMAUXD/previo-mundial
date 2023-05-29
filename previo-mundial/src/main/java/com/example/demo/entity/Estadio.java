@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import java.io.Serializable;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,7 +10,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Estadio implements Serializable {
+public class Estadio{
 
 	@Id
 	@SequenceGenerator(name="estadio_id_seq",allocationSize = 1)

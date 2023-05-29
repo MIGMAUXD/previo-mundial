@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +18,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Partido implements Serializable{
+public class Partido{
 	@Id
 	@SequenceGenerator(name="partido_id_seq",allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "partido_id_seq")
