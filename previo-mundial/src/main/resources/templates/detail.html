@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalles de la Selección</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Detalles de la Selección</h1>
+        <p>ID: <span th:text="${seleccion.id}"></span></p>
+        <p>Nombre: <span th:text="${seleccion.nombre}"></span></p>
+        <p>Continente: <span th:text="${seleccion.continente.getNombre()}"></span></p>
+        <p>Grupo: <span th:text="${seleccion.grupo}"></span></p>
+        <a class="btn btn-primary" th:href="@{/selecciones}">Volver a la Lista</a>
+    </div>
+</body>
+</html>
