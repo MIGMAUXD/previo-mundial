@@ -4,66 +4,83 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.Continente;
 import com.example.demo.repository.IContinenteRepository;
 
-@RestController
+@Controller
 @RequestMapping("/continentes")
 @CrossOrigin
 public class ContinenteController {
 
-	@Autowired
-	IContinenteRepository continenteRepository;
+    @Autowired
+    IContinenteRepository continenteRepository;
 
-	@GetMapping
-	public List<Continente> listAllContinente() {
-		return continenteRepository.findAll();
+    @GetMapping
+    public String listAllContinente(Model model) {
+        List<Continente> continentes = continenteRepository.findAll();
+        model.addAttribute("continentes", continentes);
+        return "continentes/list";
+    }
 
-	}
+    @GetMapping("/{id}")
+    public String findByIdContinente(@PathVariable Integer id, Model model) {
+        Optional<Continente> continente = continenteRepository.findById(id);
+        if (continente.isPresent()) {
+            model.addAttribute("continente", continente.get());
+            return "continentes/detail";
+        }
+        return "redirect:/continentes";
+    }
 
-	@GetMapping("/{id}")
-	public Optional<Continente> findByIdContinente(@PathVariable Integer id) {
-		Optional<Continente> continente = continenteRepository.findById(id);
-		if (continente.isPresent()) {
-			return continente;
-		}
-		return null;
-	}
+    @GetMapping("/create")
+    public String showCreateForm(Model model) {
+        model.addAttribute("continente", new Continente());
+        return "continentes/form";
+    }
 
-	@PostMapping
-	public Continente saveContinente(@RequestBody Continente continente) {
-		continenteRepository.save(continente);
-		return continente;
-	}
+    @PostMapping("/create")
+    public String saveContinente(@ModelAttribute Continente continente) {
+        continenteRepository.save(continente);
+        return "redirect:/continentes";
+    }
 
-	@PutMapping("/{id}")
-	public Continente updateContinente(@PathVariable Integer id, @RequestBody Continente continente) {
-		Optional<Continente> continenteCurrent = continenteRepository.findById(id);
-		if (continenteCurrent.isPresent()) {
-			Continente continenteReturn = continenteCurrent.get();
-			continenteReturn.setNombre(continente.getNombre());
-			continenteRepository.save(continenteReturn);
-		}
-		return null;
-	}
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Integer id, Model model) {
+        Optional<Continente> continente = continenteRepository.findById(id);
+        if (continente.isPresent()) {
+            model.addAttribute("continente", continente.get());
+            return "continentes/form";
+        }
+        return "redirect:/continentes";
+    }
 
-	@DeleteMapping("/{id}")
-	public Continente deleteContinente(@PathVariable Integer id) {
-		Optional<Continente> continente = continenteRepository.findById(id);
-		if (continente.isPresent()) {
-			continenteRepository.deleteById(id);
-			return continente.get();
-		}
-		return null;
-	}
+    @PostMapping("/edit/{id}")
+    public String updateContinente(@PathVariable Integer id, @ModelAttribute Continente continente) {
+        Optional<Continente> continenteCurrent = continenteRepository.findById(id);
+        if (continenteCurrent.isPresent()) {
+            Continente continenteReturn = continenteCurrent.get();
+            continenteReturn.setNombre(continente.getNombre());
+            continenteRepository.save(continenteReturn);
+        }
+        return "redirect:/continentes";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteContinente(@PathVariable Integer id) {
+        Optional<Continente> continente = continenteRepository.findById(id);
+        if (continente.isPresent()) {
+            continenteRepository.deleteById(id);
+        }
+        return "redirect:/continentes";
+    }
 }
+
