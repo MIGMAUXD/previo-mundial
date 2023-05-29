@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:bootstrap="http://www.thymeleaf.org/extras/bootstrap4">
+<head>
+    <title>Lista de Selecciones</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Selecciones</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Continente</th>
+                    <th>Grupo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="seleccion : ${selecciones}">
+                    <td th:text="${seleccion.id}"></td>
+                    <td th:text="${seleccion.nombre}"></td>
+                    <td th:text="${seleccion.continente.getNombre()}"></td>
+                    <td th:text="${seleccion.grupo}"></td>
+                    <td>
+                        <a class="btn btn-primary" th:href="@{/selecciones/{id}(id=${seleccion.id})}">Detalles</a>
+                        <a class="btn btn-warning" th:href="@{/selecciones/edit/{id}(id=${seleccion.id})}">Editar</a>
+                        <a class="btn btn-danger" th:href="@{/selecciones/delete/{id}(id=${seleccion.id})}">Eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a class="btn btn-success" th:href="@{/selecciones/create}">Crear Nueva Selección</a>
+    </div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>
